@@ -1,29 +1,18 @@
 <?php
+    if(isset($_POST['submit'])){
+        $to = "kumarnaiknutan@gmail.com"; // this is the to address
+        $from = $_POST['email']; // this is the sender's Email address
+        $name = $_POST['name'];
+		$message = $_POST['message'];
+        $subject = "Message";
+        $body = "Name: ". $name. "\n From: " . $_POST['email'] . "\n Message: " . $_POST['message'];
 
-function strip_crlf($string)
-{
-    return str_replace("\r\n", "", $string);
-}
-
-if (! empty($_POST["submit"])) {
-    $name = $_POST["name"];
-    $email = $_POST["email"];
-    $content = $_POST["message"];
-
-    $toEmail = "kumarnaiknutan@gmail.com";
-    // CRLF Injection attack protection
-    $name = strip_crlf($name);
-    $email = strip_crlf($email);
-    if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        echo "The email address is invalid.";
-    } else {
-        // appending \r\n at the end of mailheaders for end
-        $mailHeaders = "From: " . $name . "<" . $email . ">\r\n";
-        if (mail($toEmail, $content, $mailHeaders)) {
-            $message = "Your contact information is received successfully.";
-            $type = "success";
-        }
-    }
-}
-require_once "contact-view.php";
+        $headers = "From:" . $from;
+        $mail=mail($to,$subject,$body,$headers);
+		if($mail){
+			echo "Mail Sent. Thank you " ;
+		}else{
+			echo "Mail sending failed";
+		}
+   }
 ?>
